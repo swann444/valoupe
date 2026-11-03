@@ -1,15 +1,15 @@
-﻿---
+---
 import Base from '../layouts/Base.astro';
 import Icone from '../components/Icone.astro';
 import { FONCTIONS, STATUT_LABEL } from '../data/fonctionnalites';
 import { SITE } from '../config';
 import { url } from '../lib/url';
-const pro = ['comptoir', 'expertise', 'cibles', 'annonce', 'tva', 'registre', 'serie', 'equipe'].map((id) => FONCTIONS.find((f) => f.id === id)!);
+const pro = ['decision', 'expertise', 'regles', 'import', 'neuf', 'pilotage', 'registre', 'equipe'].map((id) => FONCTIONS.find((f) => f.id === id)!);
 const etapes = [
   { t: 'Le client pose l’objet', d: 'Recherche par nom, surnom ou référence constructeur. Le bon modèle et la bonne capacité en quelques lettres.', s: 'dispo' },
-  { t: 'Vous expertisez', d: 'État, accessoires présents, défauts : la valeur se recalcule à chaque réponse. Liste de contrôle guidée par catégorie à venir.', s: 'dispo' },
-  { t: 'Vous faites une offre', d: 'Les seuils d’achat tiennent compte de la demande, de la confiance et de vos frais. Vous savez jusqu’où aller et pourquoi.', s: 'dispo' },
-  { t: 'Vous enregistrez le rachat', d: 'Bon de rachat, registre des achats, entrée en stock avec numéro de série : en une seule saisie.', s: 'prep' },
+  { t: 'Vous expertisez', d: 'Protocole de tests par catégorie (compte associé, IMEI, écran, batterie, lecteur, manettes…) : chaque défaut recalcule l’offre, les points d’authenticité sont listés.', s: 'dispo' },
+  { t: 'Vous faites une offre', d: 'Acheter, négocier, refuser ou vérifier : la décision tient compte de vos règles (TVA sur la marge, niveau visé), du risque et du délai de vente.', s: 'dispo' },
+  { t: 'Vous enregistrez le rachat', d: 'L’expertise et l’IMEI sont enregistrés avec l’objet. Bon de rachat imprimable et registre des achats en préparation.', s: 'prep' },
   { t: 'Vous revendez', d: 'Prix de vente conseillé selon la marge visée et la plateforme, puis suivi jusqu’à la vente et au bénéfice réel.', s: 'dispo' },
 ] as const;
 ---
@@ -75,7 +75,7 @@ const etapes = [
           </article>
         ))}
       </div>
-      <p class="avert reveal">Le registre des achats et la TVA sur la marge sont conçus pour faciliter vos obligations de revendeur. Ils ne remplacent pas l’avis de votre expert-comptable ou d’un juriste.</p>
+      <p class="avert reveal">La TVA sur la marge et le futur registre des achats sont conçus pour faciliter vos obligations de revendeur. Ils ne remplacent pas l’avis de votre expert-comptable ou d’un juriste.</p>
     </div>
   </section>
 

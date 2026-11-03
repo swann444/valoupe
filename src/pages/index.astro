@@ -1,4 +1,4 @@
-﻿---
+---
 import Base from '../layouts/Base.astro';
 import LoupeMarche from '../components/LoupeMarche.astro';
 import FicheEstimation from '../components/FicheEstimation.astro';
@@ -9,7 +9,7 @@ import { url } from '../lib/url';
 
 const piliers = (Object.keys(PILIERS) as (keyof typeof PILIERS)[]).map((k) => ({
   k, ...PILIERS[k],
-  dispo: FONCTIONS.filter((f) => f.pilier === k && f.statut === 'dispo'),
+  dispo: FONCTIONS.filter((f) => f.pilier === k && f.statut === 'dispo').slice(0, 4),
   prochain: FONCTIONS.filter((f) => f.pilier === k && f.statut !== 'dispo').slice(0, 2),
 }));
 const iconePilier = { estimer: 'radar', decider: 'balance', gerer: 'stock', confiance: 'bouclier' } as const;

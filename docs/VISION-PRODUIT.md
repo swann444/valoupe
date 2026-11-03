@@ -3,6 +3,12 @@
 > Document de travail (3 novembre 2026). Il explique **à qui** sert Valoupe, **quels problèmes** il résout,
 > et **dans quel ordre** construire les fonctions. À relire avec les premières boutiques pilotes.
 
+> **État au 3 novembre 2026 (application v1.2)** — disponibles : prix neufs et promotions (fraîcheur, conditions,
+> comparatif par revendeur), protocole d'expertise par catégorie avec contrôle d'IMEI, décision d'achat expliquée
+> (acheter / négocier / refuser / vérifier, risque, délai de vente), TVA sur la marge et règles d'achat, import
+> CSV/Excel de l'historique, enregistrement de chaque décision. Prochaine étape locale : apprentissage à partir des
+> ventes de la boutique, pilotage du stock, bon de rachat et registre. Puis serveur : équipes, multi-boutiques,
+> prix actualisés depuis des sources autorisées, diagnostic photo, tendances, réseau d'échanges entre pros.
 ## 1. En une phrase
 
 Valoupe est l'outil de décision de l'achat-revente d'occasion : il dit **ce que vaut un objet**, **jusqu'où
