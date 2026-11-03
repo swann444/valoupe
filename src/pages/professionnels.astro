@@ -4,12 +4,12 @@ import Icone from '../components/Icone.astro';
 import { FONCTIONS, STATUT_LABEL } from '../data/fonctionnalites';
 import { SITE } from '../config';
 import { url } from '../lib/url';
-const pro = ['decision', 'expertise', 'regles', 'import', 'neuf', 'pilotage', 'registre', 'equipe'].map((id) => FONCTIONS.find((f) => f.id === id)!);
+const pro = ['comptoir', 'decision', 'expertise', 'registre', 'regles', 'import', 'pilotage', 'resultats'].map((id) => FONCTIONS.find((f) => f.id === id)!);
 const etapes = [
   { t: 'Le client pose l’objet', d: 'Recherche par nom, surnom ou référence constructeur. Le bon modèle et la bonne capacité en quelques lettres.', s: 'dispo' },
   { t: 'Vous expertisez', d: 'Protocole de tests par catégorie (compte associé, IMEI, écran, batterie, lecteur, manettes…) : chaque défaut recalcule l’offre, les points d’authenticité sont listés.', s: 'dispo' },
   { t: 'Vous faites une offre', d: 'Acheter, négocier, refuser ou vérifier : la décision tient compte de vos règles (TVA sur la marge, niveau visé), du risque et du délai de vente.', s: 'dispo' },
-  { t: 'Vous enregistrez le rachat', d: 'L’expertise et l’IMEI sont enregistrés avec l’objet. Bon de rachat imprimable et registre des achats en préparation.', s: 'prep' },
+  { t: 'Vous enregistrez le rachat', d: 'Identité du vendeur, paiement, bon de rachat en double exemplaire, inscription au registre et entrée en stock avec IMEI et expertise : en une seule validation.', s: 'dispo' },
   { t: 'Vous revendez', d: 'Prix de vente conseillé selon la marge visée et la plateforme, puis suivi jusqu’à la vente et au bénéfice réel.', s: 'dispo' },
 ] as const;
 ---
