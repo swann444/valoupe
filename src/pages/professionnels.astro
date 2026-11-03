@@ -1,0 +1,157 @@
+﻿---
+import Base from '../layouts/Base.astro';
+import Icone from '../components/Icone.astro';
+import { FONCTIONS, STATUT_LABEL } from '../data/fonctionnalites';
+import { SITE } from '../config';
+import { url } from '../lib/url';
+const pro = ['comptoir', 'expertise', 'cibles', 'annonce', 'tva', 'registre', 'serie', 'equipe'].map((id) => FONCTIONS.find((f) => f.id === id)!);
+const etapes = [
+  { t: 'Le client pose l’objet', d: 'Recherche par nom, surnom ou référence constructeur. Le bon modèle et la bonne capacité en quelques lettres.', s: 'dispo' },
+  { t: 'Vous expertisez', d: 'État, accessoires présents, défauts : la valeur se recalcule à chaque réponse. Liste de contrôle guidée par catégorie à venir.', s: 'dispo' },
+  { t: 'Vous faites une offre', d: 'Les seuils d’achat tiennent compte de la demande, de la confiance et de vos frais. Vous savez jusqu’où aller et pourquoi.', s: 'dispo' },
+  { t: 'Vous enregistrez le rachat', d: 'Bon de rachat, registre des achats, entrée en stock avec numéro de série : en une seule saisie.', s: 'prep' },
+  { t: 'Vous revendez', d: 'Prix de vente conseillé selon la marge visée et la plateforme, puis suivi jusqu’à la vente et au bénéfice réel.', s: 'dispo' },
+] as const;
+---
+<Base title="Professionnels" description="Valoupe pour les boutiques d’occasion : rachat au comptoir, expertise, prix d’achat à viser, marge nette, registre des achats.">
+  <section class="page-top nuit pro-top">
+    <div class="trame"></div>
+    <div class="wrap pro-grille">
+      <div class="head" style="margin:0">
+        <span class="kicker reveal">Boutiques d’occasion</span>
+        <h1 class="h-xl reveal" style="--d:.06s">Le rachat au comptoir, <mark>sans approximation.</mark></h1>
+        <p class="lead reveal" style="--d:.12s">Des seuils d’achat clairs pour toute l’équipe, une offre que vous pouvez justifier au client, et une marge qui se vérifie à la vente.</p>
+        <div class="actions reveal" style="--d:.18s"><a class="btn accent" href="#pilote">Programme pilote <Icone nom="fleche" class="fl" /></a><a class="btn ghost" href="#simulateur">Simuler l’impact</a></div>
+      </div>
+      <div class="badge-pro reveal" style="--d:.2s" aria-hidden="true">
+        <div class="bp-ligne"><span>Offre au client</span><b class="num">266 €</b></div>
+        <div class="bp-ligne"><span>Revente prudente</span><b class="num">346 €</b></div>
+        <div class="bp-ligne"><span>Marge visée</span><b class="num">25 %</b></div>
+        <div class="bp-verdict">Achat validé ✓</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head reveal"><span class="kicker">Au quotidien</span><h2 class="h-l">Cinq gestes, une seule application.</h2></div>
+      <ol class="frise">
+        {etapes.map((e, i) => (
+          <li class="reveal" style={`--d:${i * .06}s`}>
+            <span class="pt num">{i + 1}</span>
+            <div><div class="fr-tete"><h3>{e.t}</h3><span class:list={['statut', e.s]}>{STATUT_LABEL[e.s]}</span></div><p>{e.d}</p></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section nuit" id="simulateur">
+    <div class="trame"></div>
+    <div class="wrap simu-grille">
+      <div class="reveal">
+        <span class="kicker">Simulateur</span>
+        <h2 class="h-l" style="margin:16px 0 18px">Ce que valent quelques euros par rachat.</h2>
+        <p class="lead">Une offre trop haute de quelques euros, répétée chaque jour, pèse lourd sur l’année. Entrez vos propres chiffres : ce calcul ne promet rien, il rend l’enjeu visible.</p>
+      </div>
+      <form class="simu card reveal" style="--d:.1s" data-simu onsubmit="return false">
+        <label>Rachats par jour<input type="number" min="0" max="500" value="12" name="n" inputmode="numeric" /></label>
+        <label>Écart moyen évité par rachat (€)<input type="number" min="0" max="500" step="0.5" value="6" name="e" inputmode="decimal" /></label>
+        <label>Jours d’ouverture par mois<input type="number" min="0" max="31" value="24" name="j" inputmode="numeric" /></label>
+        <output class="resultat" name="r" aria-live="polite"><span>Par mois</span><b class="num" data-mois>1 728 €</b><span class="num" data-an>soit 20 736 € par an</span></output>
+        <p class="petit">Calcul : rachats × écart × jours. Hypothèses saisies par vous ; aucun résultat n’est garanti.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head reveal"><span class="kicker">Outils pro</span><h2 class="h-l">Ce qui compte derrière le comptoir.</h2></div>
+      <div class="grid g2">
+        {pro.map((f, i) => (
+          <article class="card reveal" style={`--d:${(i % 2) * .06}s`}>
+            <div class="f-haut"><div class="ico"><Icone nom={f.icone as any} /></div><span class:list={['statut', f.statut]}>{STATUT_LABEL[f.statut]}</span></div>
+            <h3>{f.titre}</h3><p>{f.texte}</p>
+          </article>
+        ))}
+      </div>
+      <p class="avert reveal">Le registre des achats et la TVA sur la marge sont conçus pour faciliter vos obligations de revendeur. Ils ne remplacent pas l’avis de votre expert-comptable ou d’un juriste.</p>
+    </div>
+  </section>
+
+  <section class="section tight" id="pilote">
+    <div class="wrap">
+      <div class="pilote reveal">
+        <div>
+          <span class="etiq">Programme pilote</span>
+          <h2 class="h-l" style="margin:18px 0 14px">Construisons-le avec vous.</h2>
+          <p>Nous cherchons quelques boutiques d’occasion, franchisées ou indépendantes, pour tester Valoupe au comptoir et décider des priorités.</p>
+        </div>
+        <ul class="coches">
+          <li><span>Accès anticipé aux fonctions pro (mode comptoir, registre, stock).</span></li>
+          <li><span>Gratuit pendant toute la durée du pilote.</span></li>
+          <li><span>Vos retours décident de l’ordre de la feuille de route.</span></li>
+          <li><span>Vos données restent dans votre boutique.</span></li>
+        </ul>
+        <div class="actions">
+          {SITE.contact
+            ? <a class="btn" href={`mailto:${SITE.contact}?subject=Programme%20pilote%20Valoupe`}>Proposer ma boutique <Icone nom="fleche" class="fl" /></a>
+            : <span class="bientot">Les candidatures ouvrent prochainement.</span>}
+          <a class="btn ghost" href={url('telecharger/')}>Essayer l’app dès maintenant</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const f = document.querySelector<HTMLFormElement>('[data-simu]');
+  const eur = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  const calc = () => {
+    if (!f) return;
+    const v = (n: string) => Math.max(0, Number(String((f.elements.namedItem(n) as HTMLInputElement).value).replace(',', '.')) || 0);
+    const mois = v('n') * v('e') * v('j');
+    const fmt = (n: number) => eur.format(n).replace(/\u202f/g, '\u00a0'); // espace fine absente de la police des titres
+    f.querySelector('[data-mois]')!.textContent = fmt(mois);
+    f.querySelector('[data-an]')!.textContent = `soit ${fmt(mois * 12)} par an`;
+  };
+  f?.addEventListener('input', calc); calc();
+</script>
+
+<style>
+  .pro-top { position: relative; overflow: hidden; margin-top: 0; }
+  .pro-grille { position: relative; display: grid; grid-template-columns: 1.4fr .8fr; gap: 48px; align-items: center; }
+  .badge-pro { background: var(--papier); color: var(--nuit); border-radius: 26px; padding: 22px; display: grid; gap: 4px; transform: rotate(2.5deg); box-shadow: 0 40px 80px -40px rgba(0,0,0,.7); }
+  .bp-ligne { display: flex; justify-content: space-between; padding: 12px 4px; border-bottom: 1px dashed var(--trait-fort); }
+  .bp-ligne b { font-family: var(--display); font-size: 1.3rem; }
+  .bp-verdict { margin-top: 12px; background: var(--jade); border-radius: 14px; padding: 14px; font: 800 1.2rem var(--display); text-align: center; }
+  @media (max-width: 900px) { .pro-grille { grid-template-columns: 1fr; } .badge-pro { max-width: 380px; } }
+
+  .frise { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; position: relative; }
+  .frise::before { content: ""; position: absolute; left: 21px; top: 20px; bottom: 20px; width: 2px; background: repeating-linear-gradient(var(--trait-fort) 0 6px, transparent 6px 12px); }
+  .frise li { display: grid; grid-template-columns: 44px 1fr; gap: 20px; padding: 18px 0; position: relative; }
+  .frise .pt { width: 44px; height: 44px; border-radius: 50%; background: var(--nuit); color: var(--etiquette); display: grid; place-items: center; font: 800 17px var(--display); position: relative; }
+  .fr-tete { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin: 8px 0 6px; }
+  .fr-tete h3 { font-size: 1.35rem; }
+  .frise p { color: var(--ardoise); max-width: 64ch; }
+
+  .simu-grille { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+  .simu { display: grid; gap: 16px; }
+  .simu label { display: grid; gap: 8px; font-weight: 700; font-size: 15px; color: #DCE5E0; }
+  .simu input { font: 700 1.25rem var(--display); padding: 12px 14px; border-radius: 14px; border: 1.5px solid rgba(245,242,234,.18); background: rgba(245,242,234,.05); color: var(--papier); width: 100%; }
+  .simu input:focus { outline: none; border-color: var(--etiquette); }
+  .resultat { display: grid; gap: 4px; padding: 20px; border-radius: 18px; background: var(--etiquette); color: var(--nuit); margin-top: 6px; }
+  .resultat span { font-weight: 700; font-size: 14px; }
+  .resultat b { font: 800 clamp(2.2rem, 4vw, 3rem)/1.05 var(--display); letter-spacing: -.04em; }
+  .petit { font-size: 13px; color: #9FB3AA !important; }
+  @media (max-width: 900px) { .simu-grille { grid-template-columns: 1fr; } }
+
+  .f-haut { display: flex; justify-content: space-between; align-items: start; }
+  .avert { margin-top: 28px; font-size: 14.5px; color: var(--ardoise); max-width: 80ch; padding-left: 16px; border-left: 3px solid var(--etiquette); }
+
+  .pilote { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px 56px; padding: clamp(28px, 5vw, 60px); border-radius: 32px; background: var(--surface); border: 1px solid var(--trait); box-shadow: var(--ombre); }
+  .pilote p { color: var(--ardoise); font-size: 1.08rem; }
+  .pilote .actions { grid-column: 1 / -1; }
+  .bientot { font-weight: 700; padding: 12px 18px; border-radius: 999px; background: var(--lin); }
+  @media (max-width: 820px) { .pilote { grid-template-columns: 1fr; } }
+</style>

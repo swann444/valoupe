@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Icone from '../components/Icone.astro';
+import { url } from '../lib/url';
+---
+<Base title="Vision" description="Pourquoi Valoupe existe : rendre l’achat-revente d’occasion aussi précis qu’un métier de la finance, et aussi simple qu’une appli de poche.">
+  <section class="page-top nuit vis-top">
+    <div class="trame"></div>
+    <div class="wrap head" style="position:relative">
+      <span class="kicker reveal">Vision</span>
+      <h1 class="h-xl reveal" style="--d:.06s">Chaque objet mérite <mark>un juste prix.</mark></h1>
+      <p class="lead reveal" style="--d:.12s">L’occasion est devenue un réflexe : pour le budget, pour la planète, pour le plaisir de la bonne affaire. Les outils pour bien l’acheter et bien la revendre, eux, n’ont pas suivi.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap vis-grille">
+      <article class="prose reveal">
+        <h2 style="margin-top:0">Le marché le plus flou du commerce</h2>
+        <p>Un même téléphone peut s’échanger du simple au double selon l’état, la capacité, la plateforme, le moment. Les prix affichés sont des souhaits, les prix payés restent invisibles, et les références se multiplient à chaque génération.</p>
+        <p>Dans ce brouillard, ceux qui gagnent sont ceux qui ont l’œil, la mémoire et le temps. Valoupe veut donner cet œil à tout le monde, et du temps à ceux qui l’ont déjà.</p>
+        <h2>Ce que nous construisons</h2>
+        <p>Un outil de décision pour l’achat-revente, du comptoir à la vente : <b>estimer</b> avec une fourchette honnête, <b>décider</b> du prix d’achat qui garantit la marge, <b>gérer</b> le stock et les frais jusqu’au bénéfice réel. D’abord pour l’électronique grand public (téléphones, tablettes, consoles, jeux, enceintes), puis pour les autres familles de l’occasion.</p>
+        <h2>Comment nous le construisons</h2>
+        <ul>
+          <li><b>La transparence avant la précision affichée.</b> Une estimation sans niveau de confiance est un mensonge poli. Valoupe montre toujours d’où vient un chiffre et à quel point il est sûr.</li>
+          <li><b>Les ventes conclues avant les annonces.</b> Ce qu’un acheteur a réellement payé vaut plus que ce qu’un vendeur espère.</li>
+          <li><b>Les données restent chez leur propriétaire.</b> L’application fonctionne hors ligne. Le partage de données de marché, quand il viendra, sera explicite, anonymisé et réversible.</li>
+          <li><b>Le respect des plateformes.</b> Pas d’aspiration de sites : uniquement des sources ouvertes, vos relevés, et les interfaces officielles quand elles existent.</li>
+          <li><b>Construit avec le terrain.</b> Les priorités viennent des boutiques qui rachètent tous les jours, pas d’une liste de fonctions.</li>
+        </ul>
+        <h2>Où nous allons</h2>
+        <p>À terme, Valoupe veut devenir la référence de prix de l’occasion : l’endroit où un professionnel vérifie une offre en quelques secondes, et où un particulier apprend ce que vaut vraiment ce qu’il possède. Une cote vivante, nourrie par ceux qui achètent et qui vendent.</p>
+      </article>
+      <aside class="vis-cote reveal" style="--d:.1s">
+        <div class="card">
+          <span class="etiq">Le nom</span>
+          <h3 style="margin-top:16px">Val + loupe</h3>
+          <p><b>Val</b>, comme valeur et valorisation. <b>Loupe</b>, l’outil de l’expert qui examine un objet avant de l’acheter. Dans le logo, le « o » devient une loupe qui valide le prix d’un ✓.</p>
+          <a class="lien" href={url('marque/')}>Découvrir l’identité →</a>
+        </div>
+        <div class="card nuit-c">
+          <h3>Où en est le projet</h3>
+          <p>Valoupe est un projet indépendant en développement actif. L’application fonctionne et se teste dès aujourd’hui ; aucune entreprise cliente ni aucun partenariat n’est annoncé tant qu’il n’existe pas.</p>
+          <a class="btn small accent" href={url('feuille-de-route/')}>Feuille de route <Icone nom="fleche" class="fl" /></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+<style>
+  .vis-top { position: relative; overflow: hidden; }
+  .vis-grille { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .vis-cote { position: sticky; top: 100px; display: grid; gap: 18px; }
+  .nuit-c { background: var(--nuit); color: var(--papier); }
+  .nuit-c p { color: #B8C7BF !important; margin: 8px 0 18px; }
+  .lien { display: inline-block; margin-top: 14px; font-weight: 700; color: var(--pin); text-decoration: none; }
+  @media (max-width: 900px) { .vis-grille { grid-template-columns: 1fr; } .vis-cote { position: static; } }
+</style>

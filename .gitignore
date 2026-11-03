@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+captures/
+test-results/
+# Jamais de secrets dans ce dépôt public
+.env
+.env.*
+*.jks
+*.keystore
+*.properties
+# Binaires de l'app : à publier via « Releases » GitHub, pas dans le dépôt
+*.apk
+*.exe

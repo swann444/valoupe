@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+const e = SITE.editor;
+const manque = 'à compléter';
+---
+<Base title="Mentions légales">
+  <section class="page-top"><div class="wrap head"><span class="kicker">Informations légales</span><h1 class="h-l">Mentions légales</h1></div></section>
+  <section class="section tight" style="padding-top:0">
+    <div class="wrap prose">
+      <h2 style="margin-top:0">Éditeur du site</h2>
+      <p>{e.name || manque}{e.status ? ` — ${e.status}` : ''}<br />{e.address || `Adresse : ${manque}`}<br />{e.email ? <>Contact : <a href={`mailto:${e.email}`}>{e.email}</a></> : `Contact : ${manque}`}</p>
+      {!e.name && <p><em>Site de présentation d’un projet en développement. Les informations de l’éditeur seront publiées avant toute activité commerciale.</em></p>}
+      <h2>Hébergement</h2>
+      <p>{e.host}</p>
+      <h2>Propriété intellectuelle</h2>
+      <p>Le nom Valoupe, le logo et les contenus de ce site sont protégés. Toute reproduction sans autorisation est interdite. Les polices Bricolage Grotesque et Atkinson Hyperlegible sont utilisées sous licence SIL Open Font License.</p>
+      <p>Les marques citées (Apple, Samsung, Sony, Nintendo, Google, eBay, Leboncoin, Vinted, Back Market…) appartiennent à leurs propriétaires ; leur mention sert uniquement à décrire des produits ou des sources de prix. Valoupe n’est affilié à aucune de ces sociétés.</p>
+    </div>
+  </section>
+</Base>

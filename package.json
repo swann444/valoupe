@@ -1,0 +1,23 @@
+{
+  "name": "valoupe-site",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "marque": "node outils/generer-marque.mjs",
+    "app": "node outils/integrer-app.mjs",
+    "verifier": "node outils/verifier-site.mjs"
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
+    "@fontsource/bricolage-grotesque": "^5.3.0",
+    "astro": "^7.4.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64",
+    "opentype.js": "^2.0.0"
+  }
+}

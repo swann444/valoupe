@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import Icone from '../components/Icone.astro';
+import { SITE } from '../config';
+import { url } from '../lib/url';
+---
+<Base title="Télécharger" description="Essayez Valoupe : version web dans le navigateur, application Android et Windows.">
+  <section class="page-top">
+    <div class="wrap head">
+      <span class="kicker reveal">Essayer Valoupe</span>
+      <h1 class="h-xl reveal" style="--d:.06s">La même app, <mark>partout.</mark></h1>
+      <p class="lead reveal" style="--d:.12s">Version de test gratuite. Aucune inscription : vos données restent sur l’appareil où vous les saisissez.</p>
+    </div>
+  </section>
+  <section class="section tight" style="padding-top:0">
+    <div class="wrap grid g3">
+      <article class="card plat reveal">
+        <div class="ico"><Icone nom="appareils" /></div>
+        <h2 class="h-m">Navigateur</h2>
+        <p>Ouvrez Valoupe sans rien installer, sur ordinateur, tablette ou téléphone. Ajoutez-la à l’écran d’accueil pour l’utiliser comme une app.</p>
+        <a class="btn accent" href={url('app/')}>Ouvrir la version web <Icone nom="fleche" class="fl" /></a>
+        <small>Chrome, Edge, Firefox, Safari récents</small>
+      </article>
+      <article class="card plat reveal" style="--d:.06s">
+        <div class="ico"><Icone nom="photo" /></div>
+        <h2 class="h-m">Android</h2>
+        <p>Application complète pour le comptoir : photos, partage des exports, fonctionnement hors ligne.</p>
+        {SITE.downloads.android
+          ? <a class="btn" href={SITE.downloads.android}>Télécharger l’APK <Icone nom="fleche" class="fl" /></a>
+          : <span class="bientot">Lien de téléchargement bientôt disponible</span>}
+        <small>Android 7 ou plus récent · fichier APK signé, hors Play Store pour l’instant</small>
+      </article>
+      <article class="card plat reveal" style="--d:.12s">
+        <div class="ico"><Icone nom="stock" /></div>
+        <h2 class="h-m">Windows</h2>
+        <p>Application de bureau légère pour la gestion du stock et l’analyse, avec ses propres données locales.</p>
+        {SITE.downloads.windows
+          ? <a class="btn" href={SITE.downloads.windows}>Télécharger pour Windows <Icone nom="fleche" class="fl" /></a>
+          : <span class="bientot">Lien de téléchargement bientôt disponible</span>}
+        <small>Windows 10 et 11 · installation sans droits administrateur</small>
+      </article>
+    </div>
+    <div class="wrap">
+      <div class="info reveal">
+        <h2 class="h-m">Bon à savoir</h2>
+        <ul class="coches">
+          <li><span><b>Chaque appareil garde ses propres données.</b> Pour passer de l’un à l’autre, utilisez Réglages → Sauvegarder, puis Restaurer.</span></li>
+          <li><span><b>Version de test.</b> Le format de sauvegarde est stable : vos données seront conservées dans les versions suivantes.</span></li>
+          <li><span><b>Avertissement à l’installation.</b> Android et Windows signalent une app installée hors boutique officielle ; c’est attendu à ce stade.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .plat { display: grid; gap: 14px; align-content: start; }
+  .plat .btn, .plat .bientot { justify-self: start; }
+  .plat small { color: var(--ardoise); font-size: 13px; }
+  .bientot { font-weight: 700; padding: 12px 16px; border-radius: 999px; background: var(--lin); font-size: 15px; }
+  .info { margin-top: clamp(28px, 4vw, 48px); padding: clamp(24px, 4vw, 44px); border-radius: 28px; border: 1.5px dashed var(--trait-fort); display: grid; gap: 20px; }
+</style>

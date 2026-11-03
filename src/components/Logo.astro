@@ -1,0 +1,11 @@
+---
+// Logo Valoupe (tracés générés par outils/generer-marque.mjs — ne pas redessiner à la main).
+import logos from '../marque-logo.json';
+interface Props { variante?: 'couleur' | 'negatif' | 'symbole'; class?: string }
+const { variante = 'couleur', class: cls } = Astro.props;
+---
+<span class:list={['logo', cls]} set:html={logos[variante]} />
+<style>
+  .logo { display: inline-block; line-height: 0; }
+  .logo :global(svg) { height: 100%; width: auto; }
+</style>

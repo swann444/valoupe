@@ -1,0 +1,84 @@
+---
+// Reproduction de la fiche produit de l'application. Chiffres CALCULÉS par le moteur d'estimation de l'app
+// (src/catalog de Marge/Valoupe, 3 novembre 2026), à partir du prix neuf officiel réel et de relevés d'exemple.
+const cibles = [
+  { l: 'Excellent achat', p: 231, g: 115 },
+  { l: 'Bon achat', p: 266, g: 80 },
+  { l: 'Prix correct', p: 301, g: 45 },
+  { l: 'Prix maximum conseillé', p: 325, g: 21 },
+];
+---
+<div class="fiche">
+  <div class="f-tete">
+    <div class="f-vignette" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9h12a4 4 0 0 1 4 4v1a3 3 0 0 1-5.4 1.8L15.5 14h-7l-1.1 1.8A3 3 0 0 1 2 14v-1a4 4 0 0 1 4-4z"/><path d="M8 11v2M7 12h2M15.5 11.5h.01M17.5 12.5h.01"/></svg>
+    </div>
+    <div>
+      <p class="f-cat">Console · Sony · CFI-2016</p>
+      <h3>PlayStation 5 Slim (lecteur) <span>1 To</span></h3>
+    </div>
+  </div>
+
+  <div class="f-bloc f-neuf">
+    <div><span class="lbl">Prix neuf officiel</span><b class="num">649,99 €</b><span class="src">Sony · depuis le 2 avr. 2026 · vérifié</span></div>
+    <div><span class="lbl">Lancement</span><b class="num">549,99 €</b><span class="src">déc. 2023</span></div>
+  </div>
+
+  <div class="f-bloc f-valeur">
+    <div class="ligne"><span class="lbl">Valeur d’occasion · très bon état</span><span class="conf"><i></i>Confiance moyenne · ±15 %</span></div>
+    <div class="grand num">≈ 372 €</div>
+    <div class="jauge" aria-hidden="true"><span class="zone"></span><span class="pt"></span></div>
+    <div class="bornes num"><span>316 €</span><span>428 €</span></div>
+    <p class="expl">Fondée sur 3 ventes conclues des 12 derniers mois (médiane, les plus récentes comptent davantage).</p>
+  </div>
+
+  <div class="f-bloc">
+    <span class="lbl">Prix d’achat à viser</span>
+    <ul class="cibles">
+      {cibles.map((c, i) => <li style={`--i:${i}`}><span>{c.l}</span><b class="num">≤ {c.p} €</b><em class="num">+{c.g} €</em></li>)}
+    </ul>
+  </div>
+
+  <div class="f-verdict">
+    <div><span class="lbl">Annonce à</span><b class="num">250 €</b></div>
+    <div class="etiq">Bon achat</div>
+    <div class="droite"><span class="lbl">Bénéfice estimé</span><b class="num gain">+122 €</b></div>
+  </div>
+</div>
+
+<style>
+  .fiche { background: var(--surface); color: var(--nuit); border-radius: 26px; padding: clamp(18px, 2.4vw, 26px); border: 1px solid var(--trait);
+    box-shadow: 0 50px 100px -50px rgba(11,26,22,.55); display: grid; gap: 12px; max-width: 520px; width: 100%; }
+  .f-tete { display: flex; gap: 14px; align-items: center; padding: 4px 2px 6px; }
+  .f-vignette { width: 54px; height: 54px; flex: none; border-radius: 16px; background: var(--lin); color: var(--pin); display: grid; place-items: center; }
+  .f-vignette svg { width: 30px; height: 30px; }
+  .f-cat { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ardoise); }
+  .f-tete h3 { font-size: 1.25rem; letter-spacing: -.02em; }
+  .f-tete h3 span { font-family: var(--body); font-weight: 700; font-size: .8rem; background: var(--lin); padding: 3px 8px; border-radius: 999px; vertical-align: 3px; }
+  .f-bloc { background: #fff; border: 1px solid var(--trait); border-radius: 18px; padding: 14px 16px; }
+  .lbl { display: block; font-size: 12.5px; color: var(--ardoise); font-weight: 700; }
+  .f-neuf { display: grid; grid-template-columns: 1.3fr 1fr; gap: 12px; }
+  .f-neuf b { display: block; font-family: var(--display); font-size: 1.35rem; letter-spacing: -.02em; }
+  .src { font-size: 12px; color: var(--ardoise); }
+  .ligne { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .conf { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #6B5200; background: rgba(255,210,63,.35); padding: 4px 9px; border-radius: 999px; }
+  .conf i { width: 7px; height: 7px; border-radius: 50%; background: #C89B00; }
+  .grand { font-family: var(--display); font-weight: 800; font-size: clamp(2.2rem, 4vw, 2.9rem); letter-spacing: -.04em; line-height: 1.1; margin: 6px 0 10px; }
+  .jauge { position: relative; height: 10px; border-radius: 6px; background: var(--lin); }
+  .zone { position: absolute; left: 18%; right: 18%; top: 0; bottom: 0; border-radius: 6px; background: linear-gradient(90deg, rgba(15,94,75,.35), var(--pin), rgba(15,94,75,.35)); }
+  .pt { position: absolute; left: 50%; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: var(--etiquette); border: 3px solid var(--nuit); }
+  .bornes { display: flex; justify-content: space-between; font-size: 12px; color: var(--ardoise); margin: 6px 18% 0; }
+  .expl { font-size: 13px; color: var(--ardoise); margin-top: 10px; }
+  .cibles { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+  .cibles li { display: grid; grid-template-columns: 1fr auto 64px; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--papier); font-size: 14.5px; }
+  .cibles li:nth-child(2) { background: rgba(61,214,163,.18); box-shadow: inset 0 0 0 1.5px rgba(15,94,75,.35); }
+  .cibles b { font-variant-numeric: tabular-nums; }
+  .cibles em { font-style: normal; color: var(--pin); font-weight: 700; text-align: right; font-size: 13px; }
+  .f-verdict { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 18px; background: var(--nuit); color: var(--papier); flex-wrap: wrap; }
+  .f-verdict .lbl { color: #9FB3AA; }
+  .f-verdict b { font-family: var(--display); font-size: 1.4rem; }
+  .f-verdict .etiq::before { background: var(--nuit); }
+  .droite { text-align: right; }
+  .gain { color: var(--jade); }
+  @media (max-width: 420px) { .f-neuf { grid-template-columns: 1fr; } .cibles li { grid-template-columns: 1fr auto; } .cibles em { display: none; } }
+</style>

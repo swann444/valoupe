@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+import Icone from '../components/Icone.astro';
+const etapes = [
+  { nom: 'Aujourd’hui', titre: 'Les fondations', statut: 'dispo', txt: 'L’application fonctionne sur Android, Windows et navigateur, hors ligne.', items: ['Carnet d’achat-revente, photos, plateformes', 'Radar des prix : 426 produits, 741 variantes', 'Valeur d’occasion, fourchette, confiance', 'Prix d’achat à viser, analyse d’une offre', 'Marge nette après commissions, tableau de bord', 'Relevés de prix sourcés, sauvegarde, export CSV'] },
+  { nom: 'Étape 1', titre: 'Comptoir', statut: 'prep', txt: 'Rendre le rachat au comptoir plus rapide et plus sûr que la méthode actuelle.', items: ['Mode comptoir : offre en moins d’une minute', 'Expertise guidée par catégorie', 'TVA sur la marge dans tous les calculs', 'Numéro de série / IMEI, étiquettes QR', 'Assistant IA local (annonces, négociation)'] },
+  { nom: 'Étape 2', titre: 'Boutique', statut: 'envisage', txt: 'Faire de Valoupe l’outil de toute l’équipe, du rachat à la comptabilité.', items: ['Registre des achats auprès des particuliers', 'Plusieurs utilisateurs et rôles', 'Synchronisation chiffrée entre appareils (optionnelle)', 'Historique des prix et vitesse de revente', 'Exports pour l’expert-comptable'] },
+  { nom: 'Étape 3', titre: 'Réseau', statut: 'envisage', txt: 'Une référence de prix partagée, alimentée par les professionnels qui le souhaitent.', items: ['Données de marché mutualisées, anonymes et consenties', 'Connexion aux interfaces officielles des places de marché', 'Multi-boutiques, tableaux de bord réseau', 'Contrôle des objets signalés (IMEI)', 'Nouvelles catégories et autres langues'] },
+] as const;
+---
+<Base title="Feuille de route" description="Ce qui est disponible dans Valoupe, et ce qui arrive : comptoir, boutique, réseau.">
+  <section class="page-top">
+    <div class="wrap head">
+      <span class="kicker reveal">Feuille de route</span>
+      <h1 class="h-xl reveal" style="--d:.06s">Une étape à la fois, <mark>dans l’ordre utile.</mark></h1>
+      <p class="lead reveal" style="--d:.12s">L’ordre est indicatif : il sera ajusté avec les boutiques pilotes. Pas de date promise tant qu’une fonction n’est pas prête et testée.</p>
+    </div>
+  </section>
+  <section class="section tight" style="padding-top:0">
+    <div class="wrap">
+      <ol class="route">
+        {etapes.map((e, i) => (
+          <li class:list={['reveal', e.statut]} style={`--d:${i * .06}s`}>
+            <div class="r-pt"><span>{i === 0 ? '✓' : i}</span></div>
+            <div class="r-carte card">
+              <div class="r-tete"><span class="r-nom">{e.nom}</span><span class:list={['statut', e.statut]}>{e.statut === 'dispo' ? 'Disponible' : e.statut === 'prep' ? 'En préparation' : 'Envisagé'}</span></div>
+              <h2 class="h-m">{e.titre}</h2>
+              <p>{e.txt}</p>
+              <ul>{e.items.map((t) => <li>{t}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div class="actions reveal" style="margin-top:40px"><a class="btn" href={url('professionnels/#pilote')}>Influencer la feuille de route <Icone nom="fleche" class="fl" /></a></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .route { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; position: relative; }
+  .route::before { content: ""; position: absolute; left: 25px; top: 30px; bottom: 30px; width: 2px; background: linear-gradient(var(--pin), var(--trait-fort)); }
+  .route > li { display: grid; grid-template-columns: 52px 1fr; gap: clamp(14px, 3vw, 28px); }
+  .r-pt span { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; font: 800 18px var(--display); background: var(--papier); border: 2px solid var(--trait-fort); position: relative; }
+  .dispo .r-pt span { background: var(--pin); color: var(--papier); border-color: var(--pin); }
+  .prep .r-pt span { background: var(--etiquette); border-color: var(--etiquette); }
+  .r-carte { display: grid; gap: 10px; }
+  .envisage .r-carte { background: transparent; box-shadow: none; border-style: dashed; }
+  .r-tete { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .r-nom { font: 700 13px var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--ardoise); }
+  .r-carte ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 8px 22px; }
+  .r-carte li { padding-left: 18px; position: relative; color: #2A3A33; }
+  .r-carte li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 8px; border-radius: 2px; background: var(--etiquette); transform: rotate(45deg); }
+  .dispo .r-carte li::before { background: var(--jade); }
+</style>

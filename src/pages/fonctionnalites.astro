@@ -1,0 +1,75 @@
+﻿---
+import Base from '../layouts/Base.astro';
+import Icone from '../components/Icone.astro';
+import { FONCTIONS, PILIERS, STATUT_LABEL, type Statut } from '../data/fonctionnalites';
+import { url } from '../lib/url';
+const cles = Object.keys(PILIERS) as (keyof typeof PILIERS)[];
+const total = (s: Statut) => FONCTIONS.filter((f) => f.statut === s).length;
+---
+<Base title="Fonctionnalités" description="Ce que Valoupe fait aujourd’hui et ce qui arrive : estimation, prix d’achat à viser, analyse d’offre, carnet, marge nette, mode comptoir, registre des achats.">
+  <section class="page-top">
+    <div class="wrap">
+      <div class="head" style="margin-bottom:28px">
+        <span class="kicker reveal">Fonctionnalités</span>
+        <h1 class="h-xl reveal" style="--d:.06s">Tout le cycle de l’occasion, <mark>chiffré</mark>.</h1>
+        <p class="lead reveal" style="--d:.12s">Chaque fonction porte son statut réel. « Disponible » signifie présente dans l’application et testée sur Android, Windows et navigateur.</p>
+      </div>
+      <div class="legende reveal" style="--d:.18s">
+        <span class="statut dispo">{STATUT_LABEL.dispo} · {total('dispo')}</span>
+        <span class="statut prep">{STATUT_LABEL.prep} · {total('prep')}</span>
+        <span class="statut envisage">{STATUT_LABEL.envisage} · {total('envisage')}</span>
+      </div>
+      <nav class="sommaire reveal" aria-label="Piliers" style="--d:.22s">
+        {cles.map((k) => <a href={`#${k}`}>{PILIERS[k].titre}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  {cles.map((k, n) => (
+    <section class:list={['section tight', { alt: n % 2 === 1 }]} id={k}>
+      <div class="wrap bloc">
+        <div class="bloc-tete reveal">
+          <span class="numero num">0{n + 1}</span>
+          <h2 class="h-l">{PILIERS[k].titre}</h2>
+          <p class="lead">{PILIERS[k].sous}</p>
+        </div>
+        <div class="grid g2 serre">
+          {FONCTIONS.filter((f) => f.pilier === k).map((f, i) => (
+            <article class:list={['card fonction reveal', f.statut]} style={`--d:${(i % 2) * .06}s`}>
+              <div class="f-haut"><div class="ico"><Icone nom={f.icone as any} /></div><span class:list={['statut', f.statut]}>{STATUT_LABEL[f.statut]}</span></div>
+              <h3>{f.titre}</h3>
+              <p>{f.texte}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section tight">
+    <div class="wrap">
+      <div class="card cta reveal">
+        <div><h2 class="h-m">Une fonction vous manque&nbsp;?</h2><p>La feuille de route est ouverte : elle explique ce qui arrive, dans quel ordre, et pourquoi.</p></div>
+        <div class="actions"><a class="btn" href={url('feuille-de-route/')}>Feuille de route <Icone nom="fleche" class="fl" /></a><a class="btn ghost" href={url('telecharger/')}>Essayer l’app</a></div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legende { display: flex; flex-wrap: wrap; gap: 10px; }
+  .sommaire { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .sommaire a { text-decoration: none; font-weight: 700; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--trait-fort); transition: background .2s, color .2s; }
+  .sommaire a:hover { background: var(--nuit); color: var(--papier); }
+  .alt { background: var(--lin); }
+  .bloc { display: grid; grid-template-columns: minmax(240px, .7fr) 1.6fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+  .bloc-tete { position: sticky; top: 100px; display: grid; gap: 12px; }
+  .numero { font: 800 15px/1 var(--display); color: var(--pin); }
+  .serre { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .fonction { display: grid; gap: 4px; align-content: start; }
+  .fonction.envisage { background: transparent; box-shadow: none; border-style: dashed; }
+  .f-haut { display: flex; justify-content: space-between; align-items: start; }
+  .cta { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .cta p { margin-top: 8px; }
+  @media (max-width: 860px) { .bloc { grid-template-columns: 1fr; } .bloc-tete { position: static; } }
+</style>

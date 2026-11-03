@@ -1,0 +1,162 @@
+﻿---
+// Gabarit commun à toutes les pages : en-tête, menu, pied de page, métadonnées de partage.
+import '@fontsource/bricolage-grotesque/600.css';
+import '@fontsource/bricolage-grotesque/700.css';
+import '@fontsource/bricolage-grotesque/800.css';
+import '@fontsource/atkinson-hyperlegible/400.css';
+import '@fontsource/atkinson-hyperlegible/700.css';
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import Icone from '../components/Icone.astro';
+import { NAV, SITE } from '../config';
+import { url } from '../lib/url';
+
+interface Props { title?: string; description?: string; sombre?: boolean }
+const { title, description = SITE.description, sombre = false } = Astro.props;
+const fullTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const here = Astro.url.pathname;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(url('partage.png'), Astro.site);
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="fr" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#0B1A16" />
+  <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+  <link rel="apple-touch-icon" href={url('apple-touch-icon.png')} />
+  <link rel="manifest" href={url('manifest.webmanifest')} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script is:inline>document.documentElement.classList.remove('no-js')</script>
+</head>
+<body>
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <header class:list={['entete', { sombre }]} data-entete>
+    <div class="wrap barre">
+      <a class="marque" href={url()} aria-label="Valoupe, accueil"><Logo variante={sombre ? 'negatif' : 'couleur'} class="logo-h" /></a>
+      <nav class="nav" id="nav" aria-label="Navigation principale">
+        <ul>
+          {NAV.map((n) => <li><a href={url(n.href)} aria-current={here.endsWith('/' + n.href) ? 'page' : undefined}>{n.label}</a></li>)}
+        </ul>
+        <a class="btn small accent" href={url('telecharger/')}>Essayer l’app <Icone nom="fleche" class="fl" /></a>
+      </nav>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="nav" data-burger>
+        <span class="sr">Ouvrir le menu</span><Icone nom="menu" class="i-ouvrir" /><Icone nom="croix" class="i-fermer" />
+      </button>
+    </div>
+  </header>
+
+  <main id="contenu"><slot /></main>
+
+  <footer class="pied nuit">
+    <div class="trame"></div>
+    <div class="wrap pied-grille">
+      <div class="pied-marque">
+        <Logo variante="negatif" class="logo-p" />
+        <p>{SITE.tagline} Estimer, acheter au bon prix, revendre avec une marge maîtrisée.</p>
+      </div>
+      <nav aria-label="Pied de page" class="pied-liens">
+        <div><h2>Produit</h2><ul>
+          <li><a href={url('fonctionnalites/')}>Fonctionnalités</a></li>
+          <li><a href={url('professionnels/')}>Professionnels</a></li>
+          <li><a href={url('telecharger/')}>Télécharger</a></li>
+          <li><a href={url('feuille-de-route/')}>Feuille de route</a></li>
+        </ul></div>
+        <div><h2>Projet</h2><ul>
+          <li><a href={url('vision/')}>Vision</a></li>
+          <li><a href={url('marque/')}>Identité &amp; presse</a></li>
+          <li><a href={url('confidentialite/')}>Confidentialité</a></li>
+          <li><a href={url('mentions-legales/')}>Mentions légales</a></li>
+        </ul></div>
+      </nav>
+    </div>
+    <div class="wrap pied-bas"><span>© {year} Valoupe. Projet indépendant, en développement.</span><span>Fait en France · Aucun traceur sur ce site</span></div>
+  </footer>
+
+  <script>
+    // Menu mobile
+    const b = document.querySelector<HTMLButtonElement>('[data-burger]');
+    const h = document.querySelector<HTMLElement>('[data-entete]');
+    b?.addEventListener('click', () => {
+      const open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', String(open));
+      h?.classList.toggle('ouvert', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && h?.classList.contains('ouvert')) b?.click(); });
+    // En-tête compact après défilement
+    // Sur la page d'accueil, l'en-tête reste sombre au-dessus du bandeau sombre, puis passe en clair.
+    const hero = document.querySelector<HTMLElement>('.hero');
+    const onScroll = () => {
+      h?.classList.toggle('defile', window.scrollY > 8);
+      h?.classList.toggle('sur-clair', !hero || window.scrollY > hero.offsetHeight - 76);
+    };
+    onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+    // Apparition des blocs au défilement
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('vu'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    // Filet de sécurité : tout bloc déjà passé à l'écran apparaît, même si l'observateur a manqué le moment
+    const rattrape = () => document.querySelectorAll('.reveal:not(.vu)').forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add('vu'); });
+    window.addEventListener('scroll', rattrape, { passive: true }); window.addEventListener('load', rattrape);
+  </script>
+</body>
+</html>
+
+<style>
+  .entete { position: sticky; top: 0; z-index: 50; transition: background .3s, box-shadow .3s, backdrop-filter .3s; }
+  .entete.defile { background: rgba(245, 242, 234, .94); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); box-shadow: 0 1px 0 var(--trait); }
+  .entete.sombre { color: var(--papier); }
+  .entete.sombre.defile { background: rgba(11, 26, 22, .82); box-shadow: 0 1px 0 rgba(245,242,234,.08); }
+  .entete.sombre.sur-clair { color: var(--nuit); background: rgba(245, 242, 234, .94); box-shadow: 0 1px 0 var(--trait); }
+  .entete.sombre.sur-clair :global(.logo-h path[fill="#F5F2EA"]) { fill: var(--nuit); }
+  .entete.sombre.sur-clair :global(.logo-h [stroke="#F5F2EA"]) { stroke: var(--nuit); }
+  .barre { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 76px; }
+  .marque { display: block; text-decoration: none; }
+  .marque :global(.logo-h) { height: 34px; }
+  .nav { display: flex; align-items: center; gap: 28px; }
+  .nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
+  .nav ul a { text-decoration: none; font-weight: 700; font-size: 15.5px; opacity: .8; position: relative; padding: 6px 0; }
+  .nav ul a:hover, .nav ul a[aria-current] { opacity: 1; }
+  .nav ul a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--etiquette); transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease); }
+  .nav ul a:hover::after, .nav ul a[aria-current]::after { transform: scaleX(1); }
+  .burger { display: none; width: 46px; height: 46px; border-radius: 14px; border: 1px solid var(--trait-fort); background: transparent; color: inherit; place-items: center; cursor: pointer; }
+  .burger :global(svg) { width: 22px; height: 22px; }
+  .burger :global(.i-fermer), .ouvert .burger :global(.i-ouvrir) { display: none; }
+  .ouvert .burger :global(.i-fermer) { display: block; }
+  @media (max-width: 920px) {
+    .burger { display: grid; }
+    .nav { position: fixed; inset: 76px 0 0; background: var(--papier); color: var(--nuit); flex-direction: column; align-items: stretch; gap: 0; padding: 18px var(--pad) 40px;
+      opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity .25s, transform .25s var(--ease), visibility .25s; overflow-y: auto; }
+    .ouvert .nav { opacity: 1; visibility: visible; transform: none; }
+    .ouvert { background: var(--papier) !important; color: var(--nuit) !important; }
+    .ouvert :global(.logo-h path[fill="#F5F2EA"]) { fill: var(--nuit); }
+    .ouvert :global(.logo-h [stroke="#F5F2EA"]) { stroke: var(--nuit); }
+    .nav ul { flex-direction: column; gap: 0; margin-bottom: 24px; }
+    .nav ul a { display: block; font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: -.03em; padding: 14px 0; border-bottom: 1px solid var(--trait); opacity: 1; }
+    .nav ul a::after { display: none; }
+    .nav .btn { justify-content: center; min-height: 54px; font-size: 17px; }
+  }
+
+  .pied { position: relative; overflow: hidden; padding: 80px 0 28px; margin-top: 0; }
+  .pied-grille { position: relative; display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; }
+  .pied-marque :global(.logo-p) { height: 46px; margin-bottom: 18px; }
+  .pied-marque p { color: #B8C7BF; max-width: 38ch; }
+  .pied-liens { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .pied h2 { font: 700 12px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--jade); margin-bottom: 16px; }
+  .pied ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .pied ul a { text-decoration: none; color: #DCE5E0; }
+  .pied ul a:hover { color: var(--etiquette); }
+  .pied-bas { position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 64px; padding-top: 22px; border-top: 1px solid rgba(245,242,234,.1); font-size: 14px; color: #8FA39A; }
+  @media (max-width: 720px) { .pied-grille { grid-template-columns: 1fr; } }
+</style>

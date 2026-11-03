@@ -1,0 +1,96 @@
+﻿---
+// Animation d'accueil : un mur d'annonces flou ; sous la loupe, la lecture de Valoupe (valeur, verdict).
+// La loupe suit la souris (ordinateur) ou se promène seule (téléphone, ou souris immobile).
+// Données d'EXEMPLE (mentionné à l'écran) : elles illustrent le fonctionnement, ce ne sont pas des cotes.
+const items = [
+  { cat: 'Console', nom: 'PS5 Slim', ann: 250, val: 372, v: 'Bon achat', t: 'ok' },
+  { cat: 'Smartphone', nom: 'iPhone 13', ann: 390, val: 300, v: 'Trop cher', t: 'non' },
+  { cat: 'Console', nom: 'Switch OLED', ann: 120, val: 215, v: 'Excellent achat', t: 'top' },
+  { cat: 'Enceinte', nom: 'JBL Charge 5', ann: 65, val: 85, v: 'Prix correct', t: 'moy' },
+  { cat: 'Tablette', nom: 'iPad Air M2', ann: 520, val: 470, v: 'Trop cher', t: 'non' },
+  { cat: 'Smartphone', nom: 'Pixel 8', ann: 180, val: 260, v: 'Bon achat', t: 'ok' },
+  { cat: 'Jeu', nom: 'Zelda TOTK', ann: 22, val: 34, v: 'Bon achat', t: 'ok' },
+  { cat: 'Console', nom: 'Xbox Series S', ann: 150, val: 170, v: 'Prix correct', t: 'moy' },
+  { cat: 'Smartphone', nom: 'Galaxy S23', ann: 210, val: 290, v: 'Bon achat', t: 'ok' },
+];
+const eur = (n: number) => n.toLocaleString('fr-FR') + ' €';
+---
+<div class="scope" data-scope>
+  <div class="couche base" aria-hidden="true">
+    {items.map((i) => (
+      <div class="ann"><span class="c">{i.cat}</span><b>{i.nom}</b><span class="p num">{eur(i.ann)}</span><span class="l"></span></div>
+    ))}
+  </div>
+  <div class="couche net" aria-hidden="true">
+    {items.map((i) => (
+      <div class="ann"><span class="c">{i.cat}</span><b>{i.nom}</b><span class="p num">{eur(i.ann)}</span>
+        <span class:list={['v', i.t]}>{i.v}</span><span class="e num">vaut ≈ {eur(i.val)}</span></div>
+    ))}
+  </div>
+  <div class="lentille" aria-hidden="true"><span class="manche"></span></div>
+  <p class="legende"><span class="pastille"></span>Exemple illustratif<span class="souris">&nbsp;— passez la souris sur les annonces</span></p>
+  <p class="sr">Illustration : sans Valoupe, les annonces se ressemblent ; sous la loupe, chaque annonce reçoit une valeur estimée et un verdict (bon achat, trop cher…).</p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-scope]').forEach((el) => {
+    const lens = el.querySelector<HTMLElement>('.lentille')!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let w = 0, h = 0, x = 0, y = 0, tx = 0, ty = 0, t = Math.random() * 10, lastMove = -1e9, visible = true, raf = 0;
+    const size = () => { const r = el.getBoundingClientRect(); w = r.width; h = r.height; };
+    const set = () => { el.style.setProperty('--x', x.toFixed(1) + 'px'); el.style.setProperty('--y', y.toFixed(1) + 'px'); };
+    size(); x = tx = w * .32; y = ty = h * .4; set();
+    new ResizeObserver(size).observe(el);
+    if (reduce) return;
+    el.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const r = el.getBoundingClientRect(); tx = e.clientX - r.left; ty = e.clientY - r.top; lastMove = performance.now();
+    });
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !raf) raf = requestAnimationFrame(loop); }).observe(el);
+    function loop(now: number) {
+      raf = 0;
+      if (!visible) return;
+      if (now - lastMove > 2200) { // promenade automatique (courbe de Lissajous)
+        t += 0.0065;
+        const rl = lens.offsetWidth / 2;
+        tx = rl + (w - 2 * rl) * (.5 + .5 * Math.sin(t * 1.3)); ty = rl + (h - 2.4 * rl) * (.5 + .5 * Math.sin(t * 2.1 + .8));
+      }
+      x += (tx - x) * .12; y += (ty - y) * .12; set();
+      raf = requestAnimationFrame(loop);
+    }
+    raf = requestAnimationFrame(loop);
+  });
+</script>
+
+<style>
+  .scope { --x: 30%; --y: 40%; --rl: clamp(78px, 11vw, 120px); position: relative; border-radius: 28px; padding: 18px; background: #0F221C;
+    border: 1px solid rgba(245,242,234,.08); box-shadow: 0 40px 80px -40px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.04); overflow: hidden; isolation: isolate; touch-action: pan-y; }
+  .couche { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .net { position: absolute; inset: 18px; clip-path: circle(var(--rl) at calc(var(--x) - 18px) calc(var(--y) - 18px)); z-index: 2; }
+  .ann { position: relative; border-radius: 16px; padding: 14px 14px 16px; min-height: 118px; display: grid; align-content: start; gap: 4px; background: #16302A; color: #DCE5E0; }
+  .base .ann { filter: blur(2.2px) saturate(.4); opacity: .55; }
+  .net .ann { background: var(--papier); color: var(--nuit); box-shadow: 0 0 0 1px rgba(11,26,22,.06); }
+  .c { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .65; font-weight: 700; }
+  .ann b { font-family: var(--display); font-size: clamp(15px, 1.3vw, 18px); letter-spacing: -.01em; line-height: 1.15; }
+  .p { font-size: 13px; opacity: .75; }
+  .l { height: 6px; width: 60%; margin-top: 8px; border-radius: 3px; background: currentColor; opacity: .15; }
+  .v { justify-self: start; margin-top: 6px; font-size: 11.5px; font-weight: 700; padding: 4px 8px; border-radius: 999px; }
+  .v.top { background: var(--pin); color: var(--papier); }
+  .v.ok { background: var(--jade); color: var(--nuit); }
+  .v.moy { background: var(--etiquette); color: var(--nuit); }
+  .v.non { background: var(--corail); color: #fff; }
+  .e { font-size: 12.5px; font-weight: 700; color: var(--pin); }
+  .lentille { position: absolute; left: var(--x); top: var(--y); width: calc(var(--rl) * 2); height: calc(var(--rl) * 2); margin: calc(var(--rl) * -1) 0 0 calc(var(--rl) * -1);
+    border-radius: 50%; border: 9px solid var(--papier); z-index: 3; pointer-events: none;
+    box-shadow: 0 18px 40px rgba(0,0,0,.45), inset 0 0 0 2px rgba(11,26,22,.15), inset 0 0 40px rgba(255,210,63,.18); }
+  .manche { position: absolute; left: 50%; top: 50%; width: calc(var(--rl) * .95); height: 16px; border-radius: 10px; background: var(--papier);
+    transform-origin: 0 50%; transform: rotate(45deg) translateX(calc(var(--rl) + 2px)); box-shadow: 0 10px 20px rgba(0,0,0,.35); }
+  .legende { position: relative; z-index: 4; display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13px; color: #9FB3AA; }
+  .pastille { width: 8px; height: 8px; border-radius: 50%; background: var(--etiquette); box-shadow: 0 0 0 4px rgba(255,210,63,.18); }
+  @media (max-width: 640px) {
+    .couche { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .ann:nth-child(n+7) { display: none; }
+    .ann { min-height: 108px; }
+  }
+  @media (hover: none) { .souris { display: none; } }
+</style>

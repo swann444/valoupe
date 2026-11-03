@@ -1,0 +1,216 @@
+﻿---
+import Base from '../layouts/Base.astro';
+import LoupeMarche from '../components/LoupeMarche.astro';
+import FicheEstimation from '../components/FicheEstimation.astro';
+import Icone from '../components/Icone.astro';
+import { FACTS } from '../config';
+import { FONCTIONS, PILIERS } from '../data/fonctionnalites';
+import { url } from '../lib/url';
+
+const piliers = (Object.keys(PILIERS) as (keyof typeof PILIERS)[]).map((k) => ({
+  k, ...PILIERS[k],
+  dispo: FONCTIONS.filter((f) => f.pilier === k && f.statut === 'dispo'),
+  prochain: FONCTIONS.filter((f) => f.pilier === k && f.statut !== 'dispo').slice(0, 2),
+}));
+const iconePilier = { estimer: 'radar', decider: 'balance', gerer: 'stock', confiance: 'bouclier' } as const;
+---
+<Base sombre>
+  <!-- Accueil -->
+  <section class="hero nuit">
+    <div class="trame"></div>
+    <div class="halo" aria-hidden="true"></div>
+    <div class="wrap hero-grille">
+      <div class="hero-texte">
+        <span class="kicker reveal">La plateforme de l’achat-revente d’occasion</span>
+        <h1 class="h-xl reveal" style="--d:.08s">L’occasion,<br /><mark>à la loupe.</mark></h1>
+        <p class="lead reveal" style="--d:.16s">Valoupe estime la valeur d’un objet, calcule le prix d’achat à ne pas dépasser et suit votre marge réelle jusqu’à la vente. Pour les boutiques d’occasion, les revendeurs et tous ceux qui achètent pour revendre.</p>
+        <div class="actions reveal" style="--d:.24s">
+          <a class="btn accent" href={url('telecharger/')}>Essayer Valoupe <Icone nom="fleche" class="fl" /></a>
+          <a class="btn ghost" href={url('professionnels/')}>Pour les professionnels</a>
+        </div>
+        <ul class="hero-points reveal" style="--d:.32s">
+          <li>Fonctionne hors ligne</li><li>Android · Windows · Web</li><li>Sans compte</li>
+        </ul>
+      </div>
+      <div class="hero-visuel reveal" style="--d:.2s"><LoupeMarche /></div>
+    </div>
+  </section>
+
+  <!-- Faits réels -->
+  <section class="faits">
+    <div class="wrap faits-grille">
+      <div class="fait reveal"><b class="num">{FACTS.products}</b><span>produits référencés</span></div>
+      <div class="fait reveal" style="--d:.06s"><b class="num">{FACTS.variants}</b><span>variantes (capacités, éditions)</span></div>
+      <div class="fait reveal" style="--d:.12s"><b class="num">{FACTS.brands}</b><span>marques, {FACTS.categories} catégories</span></div>
+      <div class="fait reveal" style="--d:.18s"><b class="num">0</b><span>donnée envoyée sur Internet</span></div>
+    </div>
+  </section>
+
+  <!-- Le problème -->
+  <section class="section">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="kicker">Le constat</span>
+        <h2 class="h-l">Acheter d’occasion, c’est souvent parier. <span class="vert">Valoupe en fait un calcul.</span></h2>
+      </div>
+      <div class="grid g3">
+        <article class="card reveal"><div class="ico"><Icone nom="oeil" /></div><h3>La cote se fait à l’œil</h3><p>Entre l’annonce optimiste, le prix neuf qui a changé et l’état réel de l’objet, l’estimation repose sur l’expérience… et sur la mémoire.</p></article>
+        <article class="card reveal" style="--d:.08s"><div class="ico"><Icone nom="euro" /></div><h3>Les frais grignotent la marge</h3><p>Commission de la plateforme, envoi, réparation, déplacement : une affaire qui semblait belle peut finir à zéro. On s’en aperçoit souvent trop tard.</p></article>
+        <article class="card reveal" style="--d:.16s"><div class="ico"><Icone nom="sablier" /></div><h3>Le client attend au comptoir</h3><p>Il faut annoncer un prix vite, le justifier, et ne pas se tromper. Chercher sur cinq sites à la fois n’est pas une méthode.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- La fiche -->
+  <section class="section vitrine">
+    <div class="wrap vitrine-grille">
+      <div class="reveal">
+        <span class="kicker">Une fiche, toutes les réponses</span>
+        <h2 class="h-l" style="margin:18px 0 22px">Combien ça vaut.<br />Combien l’acheter.<br /><mark>Combien vous gagnez.</mark></h2>
+        <p class="lead">Recherchez un modèle : Valoupe réunit le prix neuf officiel, la valeur d’occasion selon l’état, et les seuils d’achat qui garantissent votre marge. Chaque chiffre dit d’où il vient et à quel point il est sûr.</p>
+        <ul class="coches" style="margin-top:28px">
+          <li><span><b>Prix neufs datés et sourcés</b>, jamais inventés : sans source fiable, le champ reste vide.</span></li>
+          <li><span><b>Ventes conclues avant tout</b> : vos relevés et vos propres ventes pèsent plus que les annonces.</span></li>
+          <li><span><b>Une fourchette et un niveau de confiance</b>, pour savoir quand vérifier avant d’acheter.</span></li>
+          <li><span><b>Un verdict immédiat</b> sur l’offre qu’on vous fait, frais compris.</span></li>
+        </ul>
+      </div>
+      <div class="vitrine-visuel reveal" style="--d:.12s">
+        <div class="flottant f1 etiq">Prix neuf vérifié</div>
+        <div class="flottant f2 etiq pin">3 ventes relevées</div>
+        <FicheEstimation />
+        <p class="note">Écran de l’application, chiffres calculés par son moteur à partir du prix officiel Sony et de trois ventes d’exemple.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Piliers -->
+  <section class="section nuit">
+    <div class="trame"></div>
+    <div class="wrap" style="position:relative">
+      <div class="head reveal">
+        <span class="kicker">La plateforme</span>
+        <h2 class="h-l">Quatre piliers, du premier coup d’œil à la vente.</h2>
+        <p class="lead">Une seule application pour tout le cycle de l’occasion. Ce qui est disponible aujourd’hui est indiqué comme tel ; le reste est en cours de construction.</p>
+      </div>
+      <div class="grid g4">
+        {piliers.map((p, i) => (
+          <article class="card pilier reveal" style={`--d:${i * .07}s`}>
+            <div class="ico"><Icone nom={iconePilier[p.k]} /></div>
+            <h3>{p.titre}</h3>
+            <p>{p.sous}</p>
+            <ul class="mini">
+              {p.dispo.map((f) => <li><span class="statut dispo">Disponible</span>{f.titre}</li>)}
+              {p.prochain.map((f) => <li><span class:list={['statut', f.statut]}>{f.statut === 'prep' ? 'Bientôt' : 'Envisagé'}</span>{f.titre}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <div class="actions reveal" style="margin-top:36px"><a class="btn accent" href={url('fonctionnalites/')}>Toutes les fonctionnalités <Icone nom="fleche" class="fl" /></a></div>
+    </div>
+  </section>
+
+  <!-- Pour qui -->
+  <section class="section">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="kicker">Pour qui</span>
+        <h2 class="h-l">Pensé pour le comptoir, utile dès la première revente.</h2>
+      </div>
+      <div class="grid g3 publics">
+        <article class="card reveal"><span class="etiq">Boutiques &amp; réseaux</span><h3>Racheter vite et juste</h3><p>Une offre chiffrée et argumentée en quelques secondes, des règles d’achat communes à toute l’équipe, une marge qui ne dépend plus de l’humeur du jour.</p><a class="lien" href={url('professionnels/')}>Valoupe pour les boutiques →</a></article>
+        <article class="card reveal" style="--d:.08s"><span class="etiq pin">Revendeurs indépendants</span><h3>Chaque euro suivi</h3><p>Achats, frais, commissions et ventes au même endroit. Le tableau de bord montre ce que vous gagnez vraiment, et le stock qui dort.</p><a class="lien" href={url('fonctionnalites/')}>Voir les outils →</a></article>
+        <article class="card reveal" style="--d:.16s"><span class="etiq lin">Particuliers</span><h3>Ne plus se faire avoir</h3><p>Avant d’acheter ou de vendre un téléphone, une console ou une enceinte, savoir ce qu’il vaut et à quel prix l’annonce devient une bonne affaire.</p><a class="lien" href={url('telecharger/')}>Essayer gratuitement →</a></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Principes -->
+  <section class="section tight principes-s">
+    <div class="wrap">
+      <div class="principes reveal">
+        <div>
+          <span class="kicker">Nos principes</span>
+          <h2 class="h-m" style="margin-top:14px">Des chiffres honnêtes, ou pas de chiffre.</h2>
+        </div>
+        <ol>
+          <li><span><b>Aucun prix inventé.</b> Un prix sans source sûre n’est pas saisi. Une estimation affiche toujours sa confiance.</span></li>
+          <li><span><b>Vos données vous appartiennent.</b> Elles restent sur votre appareil. Rien n’est envoyé sans votre accord explicite.</span></li>
+          <li><span><b>Respect des plateformes.</b> Valoupe n’aspire aucun site : elle ouvre la recherche dans votre navigateur.</span></li>
+          <li><span><b>Règles visibles.</b> Décote, marges, frais : chaque hypothèse est nommée et modifiable, rien n’est une boîte noire.</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Appel final -->
+  <section class="section">
+    <div class="wrap">
+      <div class="final reveal">
+        <div>
+          <h2 class="h-l">Vous tenez une boutique d’occasion&nbsp;?</h2>
+          <p>Valoupe se construit avec ceux qui rachètent tous les jours. Testez l’application, dites-nous ce qui vous ferait gagner du temps : les prochaines fonctions en dépendent.</p>
+        </div>
+        <div class="actions">
+          <a class="btn" href={url('professionnels/#pilote')}>Devenir boutique pilote <Icone nom="fleche" class="fl" /></a>
+          <a class="btn ghost" href={url('feuille-de-route/')}>Voir la feuille de route</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; overflow: hidden; margin-top: -76px; padding: calc(76px + clamp(40px, 7vw, 96px)) 0 clamp(64px, 9vw, 120px); }
+  .halo { position: absolute; right: -15%; top: -20%; width: 70vw; height: 70vw; max-width: 900px; max-height: 900px; border-radius: 50%; background: radial-gradient(circle, rgba(15,94,75,.75) 0, transparent 65%); pointer-events: none; }
+  .hero-grille { position: relative; display: grid; grid-template-columns: 1.02fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .hero-texte { display: grid; gap: 26px; }
+  .hero h1 { margin-top: 4px; }
+  .hero-points { list-style: none; padding: 0; margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 8px 20px; color: #9FB3AA; font-size: 14.5px; }
+  .hero-points li { display: flex; align-items: center; gap: 8px; }
+  .hero-points li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--jade); }
+  @media (max-width: 980px) { .hero-grille { grid-template-columns: 1fr; } }
+
+  .faits { border-bottom: 1px solid var(--trait); background: var(--surface); }
+  .faits-grille { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .fait { padding: 30px 8px 30px 0; display: grid; gap: 2px; }
+  .fait + .fait { padding-left: 24px; border-left: 1px solid var(--trait); }
+  .fait b { font-family: var(--display); font-size: clamp(2rem, 1.4rem + 2vw, 3rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+  .fait span { color: var(--ardoise); font-size: 14.5px; }
+  @media (max-width: 760px) { .faits-grille { grid-template-columns: 1fr 1fr; } .fait + .fait:nth-child(3) { padding-left: 0; border-left: 0; } .fait:nth-child(n+3) { border-top: 1px solid var(--trait); } }
+
+  .vert { color: var(--pin); }
+  .vitrine { background: linear-gradient(180deg, var(--papier), var(--lin)); overflow: hidden; }
+  .vitrine-grille { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 88px); align-items: center; }
+  .vitrine-visuel { position: relative; display: grid; justify-items: center; gap: 14px; }
+  .note { font-size: 13px; color: var(--ardoise); max-width: 46ch; text-align: center; }
+  .flottant { position: absolute; z-index: 2; box-shadow: 0 10px 24px -10px rgba(11,26,22,.5); animation: flotte 6s ease-in-out infinite; }
+  .f1 { right: 18px; top: -16px; transform: rotate(4deg); }
+  .f2 { right: -14px; top: 62%; transform: rotate(-4deg); animation-delay: -3s; }
+  @keyframes flotte { 50% { translate: 0 -8px; } }
+  @media (prefers-reduced-motion: reduce) { .flottant { animation: none; } }
+  @media (max-width: 980px) { .vitrine-grille { grid-template-columns: 1fr; } .f1 { right: 8px; } .f2 { right: 0; } }
+
+  .pilier { display: flex; flex-direction: column; }
+  .mini { list-style: none; margin: 20px 0 0; padding: 18px 0 0; border-top: 1px solid rgba(245,242,234,.09); display: grid; gap: 10px; font-size: 14.5px; color: #DCE5E0; }
+  .mini li { display: grid; gap: 4px; justify-items: start; }
+  .mini .statut { font-size: 10.5px; padding: 5px 8px; }
+
+  .publics .card { display: grid; gap: 12px; align-content: start; }
+  .publics .etiq { justify-self: start; margin-bottom: 6px; }
+  .lien { font-weight: 700; color: var(--pin); text-decoration: none; margin-top: 6px; }
+  .lien:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  .principes { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(28px, 5vw, 64px); padding: clamp(28px, 4vw, 48px); border-radius: 28px; border: 1.5px dashed var(--trait-fort); }
+  .principes ol { margin: 0; padding: 0; list-style: none; counter-reset: p; display: grid; gap: 18px; }
+  .principes li { counter-increment: p; display: grid; grid-template-columns: 40px 1fr; gap: 14px; color: var(--ardoise); }
+  .principes li::before { content: counter(p, decimal-leading-zero); font: 800 15px/1.9 var(--display); color: var(--pin); }
+  .principes li b { color: var(--nuit); }
+  @media (max-width: 820px) { .principes { grid-template-columns: 1fr; } }
+
+  .final { display: grid; grid-template-columns: 1.3fr auto; gap: 32px; align-items: end; padding: clamp(32px, 5vw, 64px); border-radius: 32px; background: var(--etiquette); position: relative; overflow: hidden; }
+  .final::after { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; border: 28px solid rgba(11,26,22,.08); }
+  .final p { margin-top: 16px; max-width: 54ch; color: #3B3415; font-size: 1.08rem; }
+  .final .btn.ghost { border-color: rgba(11,26,22,.35); }
+  @media (max-width: 820px) { .final { grid-template-columns: 1fr; } }
+</style>
